@@ -52,15 +52,17 @@ Using the token when accessing `/stuff`:
 
 ## Compilation from source
 
- 0. Clone this repo
+ 1. Clone this repo
  1. Burp -> Extender -> APIs
  2. Select "Save interface files" from the bottom of the screen and
     select a temporary location
  3. Copy all `*.java` files into the `burp` directory containing this
     repo source
  4. Compile the source: 
+
         mkdir build ; javac -d build burp/BurpExtender.java burp/BurpTab.java
  5. Create a JAR file: 
+
   	cd build ; jar cvf ../out.jar .
  6. Install the `out.jar` file into Burp
 
