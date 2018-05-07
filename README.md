@@ -63,14 +63,14 @@ Using the token when accessing `/stuff`:
 
  4. Compile the source: 
 
-	cd burpAddCustomHeader
+        cd burpAddCustomHeader
         mkdir build 
-	javac -d build burp/BurpExtender.java burp/BurpTab.java
+        javac -d build burp/BurpExtender.java burp/BurpTab.java
 
  5. Create a JAR file: 
 
         cd build 
-	jar cvf ../out.jar .
+        jar cvf ../out.jar .
 
  6. Install the `out.jar` file into Burp
 
