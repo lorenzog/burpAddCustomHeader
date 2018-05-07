@@ -55,17 +55,28 @@ Using the token when accessing `/stuff`:
  1. Clone this repo
  1. Burp -> Extender -> APIs
  2. Select "Save interface files" from the bottom of the screen and
-    select a temporary location
+    select a temporary location (e.g. `/tmp/foo`)
  3. Copy all `*.java` files into the `burp` directory containing this
-    repo source
+    repo source:
+
+        cp /tmp/foo/burp/*.java burpAddCustomHeader/burp/
+
  4. Compile the source: 
 
-        mkdir build ; javac -d build burp/BurpExtender.java burp/BurpTab.java
+	cd burpAddCustomHeader
+        mkdir build 
+	javac -d build burp/BurpExtender.java burp/BurpTab.java
+
  5. Create a JAR file: 
 
-        cd build ; jar cvf ../out.jar .
+        cd build 
+	jar cvf ../out.jar .
+
  6. Install the `out.jar` file into Burp
 
 To design the GUI I've used Netbeans. The BurpTab.form file should be
 enough to recreate it.
+
+LifeProTip: hold the CTRL key when selecting the checkbox in the
+"Extensions" tab in Burp if you want to re-load an extension.
 
