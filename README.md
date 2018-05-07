@@ -63,7 +63,7 @@ Using the token when accessing `/stuff`:
         mkdir build ; javac -d build burp/BurpExtender.java burp/BurpTab.java
  5. Create a JAR file: 
 
-  	cd build ; jar cvf ../out.jar .
+        cd build ; jar cvf ../out.jar .
  6. Install the `out.jar` file into Burp
 
 To design the GUI I've used Netbeans. The BurpTab.form file should be
