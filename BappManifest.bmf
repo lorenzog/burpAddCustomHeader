@@ -1,0 +1,12 @@
+Uuid: 807907f5380c4cb38748ef4fc1d8cdbc
+ExtensionType: 0
+Name: Add Custom Header
+RepoName: add-custom-header
+ScreenVersion: 1.0
+SerialVersion: 0
+MinPlatformVersion: 0
+ProOnly: False
+Author: Lorenzo Grespan
+ShortDescription: Add or update custom HTTP headers from session handling rules. Useful for JWT.
+EntryPoint: build/libs/add-custom-header.jar
+BuildCommand: gradle jar
