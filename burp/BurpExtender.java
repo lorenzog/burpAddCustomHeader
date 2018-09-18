@@ -61,7 +61,7 @@ public class BurpExtender implements IBurpExtender, ISessionHandlingAction, ITab
     // methods below from ISessionHandlingAction
     @Override
     public String getActionName() {
-        return "Add Bearer Token";
+        return extensionName;
     }
 
     @Override
