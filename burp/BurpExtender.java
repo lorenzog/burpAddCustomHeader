@@ -93,8 +93,7 @@ public class BurpExtender implements IBurpExtender, ISessionHandlingAction, ITab
                 if (_responseBody == null) return;
                 IResponseInfo macroResponse = helpers.analyzeResponse(_responseBody);
                 if (macroResponse == null ) return;
-                int bodyOffset = macroResponse.getBodyOffset();
-                String responseBody = helpers.bytesToString(_responseBody).substring(bodyOffset);
+                String responseBody = helpers.bytesToString(_responseBody);
                 Matcher m = p.matcher(responseBody);
                 if (m.find()) {
                     token = m.group(1);
