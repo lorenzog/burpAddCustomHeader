@@ -1,0 +1,21 @@
+<p>Add or update custom HTTP headers from session handling rules. This is especially useful for JSON Web Tokens (JWT).</p>
+
+<p>Basic usage, with a hard-coded value:</p>
+
+<ol>
+    <li>Select the <i>Add Custom Header</i> tab and enter the header name and hard-coded value.</li>
+    <li>Select Project Options -&gt; Sessions</li>
+    <li>Add a Session Handling rule</li>
+    <li>Name it and select <i>Add</i>, <i>Invoke a Burp Extension</i> extension</li>
+    <li>Make sure the scope is correct. If you're just trying this out, you can use <i>Include all URLs</i>, but set a proper scope for regular use.</li>
+    <li>Select the <i>Add Custom Header</i> option from the list in the following screen</li>
+</ol>
+
+<p>You can also use a dynamic value. In this case:</p>
+
+<ol>
+    <li>Record a macro that fetches the dynamic value</li>
+    <li>In the session handling rule, create an action to <i>Run a macro</i> and select the macro</li>
+    <li>Enable <i>After running the macro, invoke a Burp extension action handler</i> and select <i>Add Bearer Token</i></li>
+    <li>In <i>Add Customer Header</i> enter a regular expression that extracts the value from the macro response</li>
+</ol>
