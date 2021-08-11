@@ -273,6 +273,9 @@ public class BurpTab extends javax.swing.JPanel {
     public void setRegExpText(String regExpText) {
         this.regExpText.setText(regExpText);
     }
+    
+    public void setUseHardCoded() {hardCodedRadio.setSelected(true);}
+    public void setUseRegExp() {regExpRadio.setSelected(true);}
 
     // custom code
     void updateFinalResultLabel() {
