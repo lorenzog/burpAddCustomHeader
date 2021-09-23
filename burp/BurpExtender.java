@@ -1,16 +1,14 @@
 package burp;
 
+import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import java.util.Arrays;
-import javax.swing.JPanel;
 
-import javax.swing.SwingUtilities;
-
-public class BurpExtender implements IBurpExtender, ISessionHandlingAction, ITab {
+public class BurpExtender implements IBurpExtender, ISessionHandlingAction, ITab, IExtensionStateListener {
 
     IExtensionHelpers helpers = null;
     Pattern p;
@@ -24,6 +22,13 @@ public class BurpExtender implements IBurpExtender, ISessionHandlingAction, ITab
     final String DEFAULT_REGEXP = "access_token\":\"(.*?)\"";
     final String DEFAULT_HARDCODED_VALUE = "<insert static JWT token here>";
 
+    //storage key for settings
+    final String KEY_REGEX = "setting_regex";
+    final String KEY_HARDCODED_VALUE = "setting_hardcoded_value";
+    final String KEY_MODE = "setting_mode";
+    final String KEY_HEADER_NAME = "settings_header_name";
+    final String KEY_HEADER_VALUE_PREFIX = "settings_header_value_prefix";
+
     private BurpTab tab;
 
     void useRegExp() {
@@ -36,6 +41,8 @@ public class BurpExtender implements IBurpExtender, ISessionHandlingAction, ITab
         callbacks.setExtensionName(extensionName);
         this.helpers = callbacks.getHelpers();
         callbacks.registerSessionHandlingAction(this);
+        //Register the listener to trigger the auto storage of the settings
+        callbacks.registerExtensionStateListener(this);
 
         // create our UI
         SwingUtilities.invokeLater(new Runnable() {
@@ -48,6 +55,32 @@ public class BurpExtender implements IBurpExtender, ISessionHandlingAction, ITab
                 tab.setHeaderValuePrefix(DEFAULT_HEADER_VALUE_PREFIX);
                 tab.setRegExpText(DEFAULT_REGEXP);
                 tab.setHardCodedText(DEFAULT_HARDCODED_VALUE);
+
+                //Loaded stored settings (if exists)
+                String headerName = callbacks.loadExtensionSetting(KEY_HEADER_NAME);
+                if(headerName != null && headerName.trim().length() > 0){
+                    tab.setHeaderName(headerName);
+                }
+                String headerValuePrefix = callbacks.loadExtensionSetting(KEY_HEADER_VALUE_PREFIX);
+                if(headerValuePrefix != null && headerValuePrefix.trim().length() > 0){
+                    tab.setHeaderValuePrefix(headerValuePrefix);
+                }
+                String regex = callbacks.loadExtensionSetting(KEY_REGEX);
+                if(regex != null && regex.trim().length() > 0){
+                    tab.setRegExpText(regex);
+                }
+                String hardCodedText = callbacks.loadExtensionSetting(KEY_HARDCODED_VALUE);
+                if(hardCodedText != null && hardCodedText.trim().length() > 0){
+                    tab.setHardCodedText(hardCodedText);
+                }
+                String mode = callbacks.loadExtensionSetting(KEY_MODE);
+                if("REGEX".equalsIgnoreCase(mode)){
+                    tab.setUseRegExp();
+                }else if("HARD_CODED".equalsIgnoreCase(mode)){
+                    tab.setUseHardCoded();
+                }
+                callbacks.printOutput("Mode loaded: " + mode);
+
                 // force update the example label
                 tab.updateFinalResultLabel();
                 // customize our UI components
@@ -145,6 +178,24 @@ public class BurpExtender implements IBurpExtender, ISessionHandlingAction, ITab
     @Override
     public Component getUiComponent() {
         return tab;
+    }
+
+    @Override
+    public void extensionUnloaded() {
+        //Save settings when burp close and extension is unloaded
+        callbacks.printOutput("Saving settings to project file...");
+        callbacks.saveExtensionSetting(KEY_HEADER_NAME, tab.getHeaderName());
+        callbacks.saveExtensionSetting(KEY_HEADER_VALUE_PREFIX, tab.getHeaderValuePrefix());
+        callbacks.saveExtensionSetting(KEY_REGEX, tab.getRegExpText());
+        callbacks.saveExtensionSetting(KEY_HARDCODED_VALUE, tab.getHardCodedText());
+        String mode = "DISABLED";
+        if(tab.useHardCoded()){
+            mode = "HARD_CODED";
+        }else if(tab.useRegExp()){
+            mode = "REGEX";
+        }
+        callbacks.saveExtensionSetting(KEY_MODE, mode);
+        callbacks.printOutput("Settings saved!");
     }
     // end ITab methods
 
